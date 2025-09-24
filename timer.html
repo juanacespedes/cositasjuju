@@ -1,79 +1,45 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Cronómetro 30 Minutos</title>
   <style>
-    /* Fondo transparente para overlay */
-    html,body { height:100%; margin:0; background:transparent; }
-    body { display:flex; align-items:center; justify-content:center; font-family: Inter, system-ui, Arial; }
-    .timer {
-      backdrop-filter: blur(4px);
-      padding: 10px 18px;
-      border-radius: 12px;
-      min-width:120px;
-      text-align:center;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-      background: rgba(255,255,255,0.06); /* ligero */
-      color: #ffffff;
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent; /* fondo transparente para SplitCam */
     }
-    .time {
-      font-size: 28px;
-      letter-spacing: 1px;
-      font-weight: 600;
-    }
-    .label {
-      font-size: 11px;
-      opacity: 0.8;
-      margin-top:4px;
+    #timer {
+      font-size: 150px; /* tamaño grande */
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      color: white; /* cambia a otro color si quieres */
+      text-shadow: 0 0 15px black; /* borde para que se vea mejor */
     }
   </style>
 </head>
 <body>
-  <div class="timer" id="timer">
-    <div class="time" id="time">00:00</div>
-    <div class="label" id="label">Elapsed</div>
-  </div>
+  <div id="timer">30:00</div>
 
-<script>
-  // CONFIGURACIÓN: tipo = "countup" o "countdown"
-  const type = "countup"; // o "countdown"
-  // Si countdown, definir segundos:
-  let seconds = 300; // 5 minutos (solo para countdown)
+  <script>
+    let time = 30 * 60; // 30 minutos en segundos
+    const timerElement = document.getElementById("timer");
 
-  const timeEl = document.getElementById('time');
-  const labelEl = document.getElementById('label');
-
-  function format(s){
-    const mm = Math.floor(s/60).toString().padStart(2,'0');
-    const ss = (s%60).toString().padStart(2,'0');
-    return `${mm}:${ss}`;
-  }
-
-  if(type === 'countup'){
-    labelEl.textContent = 'Elapsed';
-    let t = 0;
-    timeEl.textContent = format(t);
-    setInterval(()=> {
-      t++;
-      timeEl.textContent = format(t);
-    },1000);
-  } else {
-    labelEl.textContent = 'Time left';
-    timeEl.textContent = format(seconds);
-    const interval = setInterval(()=>{
-      if(seconds<=0){
-        timeEl.textContent = "00:00";
-        // opcional: flash o envía evento
-        clearInterval(interval);
-        // puedes añadir animación CSS o cambiar label:
-        labelEl.textContent = 'Done';
-        return;
+    function updateTimer() {
+      let minutes = Math.floor(time / 60);
+      let seconds = time % 60;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      timerElement.textContent = `${minutes}:${seconds}`;
+      if (time > 0) {
+        time--;
       }
-      seconds--;
-      timeEl.textContent = format(seconds);
-    },1000);
-  }
-</script>
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+  </script>
 </body>
 </html>
